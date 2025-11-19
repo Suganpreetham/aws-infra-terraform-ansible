@@ -1,0 +1,38 @@
+- name: Configure web servers
+  hosts: all
+  become: true
+  vars:
+    web_root: /var/www/html
+  tasks:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+
+    - name: ensure nginx is installed
+      apt:
+        name: nginx
+        state: present
+
+    - name: make web root
+      file:
+        path: "{{ web_root }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: "0755"
+
+    - name: deploy index.html
+      template:
+        src: ../roles/nginx/templates/index.html.j2
+        dest: "{{ web_root }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: "0644"
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
