@@ -8,17 +8,24 @@ First, the infrastructure is created automatically using Terraform. It builds th
 Once the server is up, the configuration part happens. A shell script generates fresh SSH keys, sets up passwordless access, and Ansible takes over to install and configure NGINX. It also pushes the static website files to the EC2 machine so the web server is ready.
 
 When everything is done, the entire environment can be brought online in a few minutes using two commands:
+
 1.terraform apply
+
 2.ansible-playbook site.yml
 
 **Technologies Used:**
-**Terraform**
+
+1.**Terraform**
 Handles all AWS provisioning — VPC, subnets, security groups, and EC2 — using reusable modules. It builds the entire infra the same way every time.
-**Ansible**
+
+2.**Ansible**
 Takes over after the server is created. Installs NGINX, deploys web content, and connects to the EC2 instance using dynamic inventory and passwordless SSH.
-**AWS**
+
+3.**AWS**
 EC2 for the server, VPC for networking, Internet Gateway for internet access, and Security Groups for traffic control.
-**NGINX**
+
+4.**NGINX**
 Serves the static site, fully installed and configured by Ansible.
-**Shell Scripts**
+
+5.**Shell Scripts**
 Generate SSH keys and prep everything so Terraform and Ansible can run without manual steps.
